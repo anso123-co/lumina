@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tienda de Accesorios | Minimal</title>
+  <meta name="description" content="Tienda online de accesorios: manillas, pulseras, anillos, collares." />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Topbar: logo + carrito arriba, buscador abajo (mobile-first) -->
+  <header class="topbar" role="banner">
+    <div class="inner">
+      <div class="brand">
+        <a class="logo" href="./index.html" aria-label="Ir a inicio">
+          <span class="dot" aria-hidden="true"></span>
+          <span>ACCESORIOS</span>
+          <span class="muted tiny">/ minimal</span>
+        </a>
+
+        <button id="cartOpenBtn" class="btn icon cartBtn" aria-label="Abrir carrito">
+          <span aria-hidden="true">🛒</span>
+          <span class="tiny muted">Carrito</span>
+          <span id="cartCount" class="cartCount" aria-label="Cantidad de items">0</span>
+        </button>
+      </div>
+
+      <div class="searchRow" role="search" aria-label="Buscar productos">
+        <input id="searchInput" class="input" type="search" placeholder="Buscar: anillo, collar, pulsera..." aria-label="Buscar productos" />
+        <button id="filtersToggleBtn" class="btn" aria-expanded="false" aria-controls="filtersBox">Filtros</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    <!-- Hero compacto -->
+    <section class="hero" aria-label="Presentación">
+      <div class="heroCard">
+        <h1 class="heroTitle">Accesorios elegantes, sin ruido.</h1>
+        <p class="heroText">Elige tu estilo. Selecciona talla y color. Precios en COP con descuento automático.</p>
+      </div>
+    </section>
+
+    <!-- Filtros colapsables en móvil -->
+    <section id="filtersBox" class="filters" aria-label="Filtros de productos">
+      <div class="filtersHeader">
+        <div class="row wrap">
+          <span class="badge" aria-label="Estado">Catálogo</span>
+          <span id="resultCount" class="muted small">Cargando…</span>
+        </div>
+        <button id="clearFiltersBtn" class="btn ghost" aria-label="Limpiar filtros">Limpiar</button>
+      </div>
+      <div id="filtersBody" class="filtersBody">
+        <div class="grid2">
+          <div>
+            <label for="categorySelect">Categoría</label>
+            <select id="categorySelect" class="select" aria-label="Filtrar por categoría">
+              <option value="">Todas</option>
+              <option value="manillas">Manillas</option>
+              <option value="pulseras">Pulseras</option>
+              <option value="anillos">Anillos</option>
+              <option value="collares">Collares</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="sortSelect">Orden</label>
+            <select id="sortSelect" class="select" aria-label="Ordenar productos">
+              <option value="featured">Destacados</option>
+              <option value="price_asc">Precio (asc)</option>
+              <option value="price_desc">Precio (desc)</option>
+              <option value="name_asc">Nombre (A–Z)</option>
+              <option value="name_desc">Nombre (Z–A)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <label for="featuredOnly">Solo destacados</label>
+            <select id="featuredOnly" class="select" aria-label="Filtrar destacados">
+              <option value="all">Todos</option>
+              <option value="yes">Sí</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="priceCap">Precio máximo (COP)</label>
+            <input id="priceCap" class="input" inputmode="numeric" placeholder="Ej: 80000" aria-label="Precio máximo" />
+            <div class="helper">Tip: filtra por el “Desde” (precio mínimo por talla).</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grid -->
+    <section aria-label="Productos">
+      <div id="loadingBar" class="panel" style="margin-top:14px;">
+        <div class="row spread">
+          <span class="muted">Cargando productos…</span>
+          <span class="kbd">Live</span>
+        </div>
+      </div>
+
+      <div id="productsGrid" class="grid" aria-live="polite"></div>
+
+      <div id="emptyState" class="panel hidden" style="margin-top:14px;">
+        <h2 style="margin:0 0 6px;">No hay resultados</h2>
+        <p class="muted" style="margin:0;">Prueba con otra búsqueda o limpia filtros.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Drawer carrito -->
+  <div id="drawerBackdrop" class="drawerBackdrop" aria-hidden="true"></div>
+  <aside id="cartDrawer" class="drawer" aria-label="Carrito de compras" aria-hidden="true">
+    <div class="drawerHeader">
+      <strong>Carrito</strong>
+      <button id="cartCloseBtn" class="btn icon" aria-label="Cerrar carrito">✕</button>
+    </div>
+
+    <div class="drawerBody">
+      <div id="cartItems"></div>
+
+      <div class="panel">
+        <div class="cartLine">
+          <span>Subtotal</span>
+          <span id="cartSubtotal">—</span>
+        </div>
+        <div class="cartLine">
+          <span>Envío</span>
+          <span id="cartShipping">—</span>
+        </div>
+        <div class="hr"></div>
+        <div class="cartTotal">
+          <span>Total</span>
+          <span id="cartTotal">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawerFooter">
+      <button id="checkoutBtn" class="btn primary block" aria-label="Finalizar compra">Finalizar compra</button>
+      <button id="clearCartBtn" class="btn block" aria-label="Vaciar carrito">Vaciar carrito</button>
+      <p class="muted tiny" style="margin:0;">
+        Por ahora, “Finalizar compra” es simulado.
+      </p>
+    </div>
+  </aside>
+
+  <!-- Modal producto -->
+  <div id="modalBackdrop" class="modalBackdrop" aria-hidden="true"></div>
+  <section id="productModal" class="modal" role="dialog" aria-modal="true" aria-label="Detalle del producto">
+    <div class="modalInner">
+      <div class="modalHeader">
+        <strong>Detalle</strong>
+        <button id="modalCloseBtn" class="btn icon" aria-label="Cerrar">✕</button>
+      </div>
+
+      <div class="modalGrid">
+        <div class="modalMedia">
+          <img id="modalImg" alt="" />
+        </div>
+
+        <div class="modalInfo">
+          <div class="pillRow" id="modalBadges"></div>
+          <h2 id="modalTitle" class="modalTitle"></h2>
+          <p id="modalDesc" class="modalDesc"></p>
+
+          <div class="variantGrid" aria-label="Selección de variante">
+            <div>
+              <label for="sizeSelect">Talla</label>
+              <select id="sizeSelect" class="select" aria-label="Seleccionar talla"></select>
+            </div>
+            <div>
+              <label for="colorSelect">Color</label>
+              <select id="colorSelect" class="select" aria-label="Seleccionar color"></select>
+            </div>
+          </div>
+
+          <div class="priceBox" aria-label="Precio final">
+            <div>
+              <div class="muted tiny">Precio final</div>
+              <div class="row" style="gap:10px; align-items:baseline;">
+                <div id="modalPrice" class="big">—</div>
+                <div id="modalOldPrice" class="old hidden">—</div>
+              </div>
+              <div id="modalFormula" class="muted tiny" style="margin-top:4px;"></div>
+            </div>
+            <span id="modalDiscountHint" class="badge discount hidden">—</span>
+          </div>
+
+          <div class="modalActions">
+            <button id="addToCartBtn" class="btn primary block" aria-label="Agregar al carrito">Agregar al carrito</button>
+            <button id="buyNowBtn" class="btn block" aria-label="Comprar ahora">Comprar ahora</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
