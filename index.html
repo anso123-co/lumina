@@ -1,206 +1,228 @@
 <!doctype html>
-<html lang="es-CO">
+<html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Tienda de Accesorios | Minimal</title>
-  <meta name="description" content="Tienda online de accesorios: manillas, pulseras, anillos, collares." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Lumina — Tienda</title>
+
+  <!-- Fuente opcional (no bloquea render, display=swap) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <!-- Topbar: logo + carrito arriba, buscador abajo (mobile-first) -->
-  <header class="topbar" role="banner">
-    <div class="inner">
-      <div class="brand">
-        <a class="logo" href="./index.html" aria-label="Ir a inicio">
-          <span class="dot" aria-hidden="true"></span>
-          <span>ACCESORIOS</span>
-          <span class="muted tiny">/ minimal</span>
-        </a>
+  <div class="bg-aurora" aria-hidden="true"></div>
 
-        <button id="cartOpenBtn" class="btn icon cartBtn" aria-label="Abrir carrito">
-          <span aria-hidden="true">🛒</span>
-          <span class="tiny muted">Carrito</span>
-          <span id="cartCount" class="cartCount" aria-label="Cantidad de items">0</span>
-        </button>
-      </div>
+  <header class="topbar">
+    <button class="logoBtn" id="logoBtn" aria-label="Inicio">
+      <span class="logoDot" aria-hidden="true"></span>
+      <span class="logoText">Lumina</span>
+      <span class="logoTag">fashion</span>
+    </button>
 
-      <div class="searchRow" role="search" aria-label="Buscar productos">
-        <input id="searchInput" class="input" type="search" placeholder="Buscar: anillo, collar, pulsera..." aria-label="Buscar productos" />
-        <button id="filtersToggleBtn" class="btn" aria-expanded="false" aria-controls="filtersBox">Filtros</button>
-      </div>
-    </div>
+    <button class="iconBtn" id="cartBtn" aria-label="Abrir carrito">
+      <span class="icon">🛒</span>
+      <span class="pillCount" id="cartCount" aria-label="Cantidad en carrito">0</span>
+    </button>
   </header>
 
-  <main class="container" role="main">
-    <!-- Hero compacto -->
-    <section class="hero" aria-label="Presentación">
-      <div class="heroCard">
-        <h1 class="heroTitle">Accesorios elegantes, sin ruido.</h1>
-        <p class="heroText">Elige tu estilo. Selecciona talla y color. Precios en COP con descuento automático.</p>
+  <main class="container">
+    <section class="hero">
+      <h1 class="heroTitle">Moda y accesorios</h1>
+      <p class="heroSub">Rápido, colorido y listo para tu Android.</p>
+    </section>
+
+    <section class="searchRow" aria-label="Buscar productos">
+      <form class="searchForm" id="searchForm" role="search">
+        <input
+          id="searchInput"
+          class="searchInput"
+          type="search"
+          inputmode="search"
+          autocomplete="off"
+          placeholder="Buscar (nombre, categoría, descripción)…"
+          aria-label="Buscar"
+        />
+        <button class="btn btnPrimary" type="submit" aria-label="Buscar">Buscar</button>
+      </form>
+
+      <button class="btn btnSoft" id="filtersToggle" aria-expanded="false" aria-controls="filtersPanel">
+        Filtros
+      </button>
+    </section>
+
+    <section id="filtersPanel" class="filtersPanel" hidden>
+      <div class="filtersGrid">
+        <label class="field">
+          <span class="fieldLabel">Categoría</span>
+          <select id="categorySelect" class="select" aria-label="Filtrar por categoría">
+            <option value="">Todas</option>
+            <option value="manillas">Manillas</option>
+            <option value="pulseras">Pulseras</option>
+            <option value="anillos">Anillos</option>
+            <option value="collares">Collares</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span class="fieldLabel">Orden</span>
+          <select id="sortSelect" class="select" aria-label="Ordenar productos">
+            <option value="featured_recent">Destacados + recientes</option>
+            <option value="price_asc">Precio: menor a mayor</option>
+            <option value="price_desc">Precio: mayor a menor</option>
+            <option value="name_asc">Nombre: A–Z</option>
+            <option value="name_desc">Nombre: Z–A</option>
+          </select>
+        </label>
+
+        <label class="field inline">
+          <input id="featuredOnly" type="checkbox" class="checkbox" />
+          <span>Solo destacados</span>
+        </label>
+
+        <label class="field">
+          <span class="fieldLabel">Precio máximo (COP)</span>
+          <input
+            id="maxPrice"
+            class="input"
+            type="number"
+            inputmode="numeric"
+            placeholder="Ej: 120000"
+            min="0"
+            step="1000"
+            aria-label="Precio máximo"
+          />
+        </label>
+
+        <button class="btn btnGhost" id="clearFilters" type="button">Limpiar filtros</button>
       </div>
     </section>
 
-    <!-- Filtros colapsables en móvil -->
-    <section id="filtersBox" class="filters" aria-label="Filtros de productos">
-      <div class="filtersHeader">
-        <div class="row wrap">
-          <span class="badge" aria-label="Estado">Catálogo</span>
-          <span id="resultCount" class="muted small">Cargando…</span>
-        </div>
-        <button id="clearFiltersBtn" class="btn ghost" aria-label="Limpiar filtros">Limpiar</button>
-      </div>
-      <div id="filtersBody" class="filtersBody">
-        <div class="grid2">
-          <div>
-            <label for="categorySelect">Categoría</label>
-            <select id="categorySelect" class="select" aria-label="Filtrar por categoría">
-              <option value="">Todas</option>
-              <option value="manillas">Manillas</option>
-              <option value="pulseras">Pulseras</option>
-              <option value="anillos">Anillos</option>
-              <option value="collares">Collares</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="sortSelect">Orden</label>
-            <select id="sortSelect" class="select" aria-label="Ordenar productos">
-              <option value="featured">Destacados</option>
-              <option value="price_asc">Precio (asc)</option>
-              <option value="price_desc">Precio (desc)</option>
-              <option value="name_asc">Nombre (A–Z)</option>
-              <option value="name_desc">Nombre (Z–A)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid2">
-          <div>
-            <label for="featuredOnly">Solo destacados</label>
-            <select id="featuredOnly" class="select" aria-label="Filtrar destacados">
-              <option value="all">Todos</option>
-              <option value="yes">Sí</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="priceCap">Precio máximo (COP)</label>
-            <input id="priceCap" class="input" inputmode="numeric" placeholder="Ej: 80000" aria-label="Precio máximo" />
-            <div class="helper">Tip: filtra por el “Desde” (precio mínimo por talla).</div>
-          </div>
-        </div>
-      </div>
+    <section class="listHeader">
+      <div class="tiny" id="resultsMeta" aria-live="polite"></div>
+      <div class="tiny muted">Tip: escribe <b>admin</b> en el buscador 😉</div>
     </section>
 
-    <!-- Grid -->
-    <section aria-label="Productos">
-      <div id="loadingBar" class="panel" style="margin-top:14px;">
-        <div class="row spread">
-          <span class="muted">Cargando productos…</span>
-          <span class="kbd">Live</span>
-        </div>
-      </div>
-
-      <div id="productsGrid" class="grid" aria-live="polite"></div>
-
-      <div id="emptyState" class="panel hidden" style="margin-top:14px;">
-        <h2 style="margin:0 0 6px;">No hay resultados</h2>
-        <p class="muted" style="margin:0;">Prueba con otra búsqueda o limpia filtros.</p>
-      </div>
+    <section id="statusBar" class="statusBar" aria-live="polite">
+      <div class="loadingDot" aria-hidden="true"></div>
+      <span id="statusText">Cargando productos…</span>
     </section>
+
+    <section id="emptyState" class="emptyState" hidden>
+      <div class="emptyIcon" aria-hidden="true">🫧</div>
+      <div class="emptyTitle">No hay resultados</div>
+      <div class="emptySub">Prueba con otra búsqueda o limpia los filtros.</div>
+    </section>
+
+    <section id="grid" class="grid" aria-label="Listado de productos"></section>
+
+    <footer class="footer">
+      <span>© <span id="year"></span> Lumina</span>
+      <span class="dotSep" aria-hidden="true">•</span>
+      <span class="muted">Hecho para móvil</span>
+    </footer>
   </main>
 
-  <!-- Drawer carrito -->
-  <div id="drawerBackdrop" class="drawerBackdrop" aria-hidden="true"></div>
-  <aside id="cartDrawer" class="drawer" aria-label="Carrito de compras" aria-hidden="true">
-    <div class="drawerHeader">
-      <strong>Carrito</strong>
-      <button id="cartCloseBtn" class="btn icon" aria-label="Cerrar carrito">✕</button>
-    </div>
+  <!-- Drawer Carrito -->
+  <aside id="cartDrawer" class="drawer" aria-hidden="true" aria-label="Carrito">
+    <div class="drawerBackdrop" id="drawerBackdrop" aria-hidden="true"></div>
 
-    <div class="drawerBody">
-      <div id="cartItems"></div>
+    <div class="drawerPanel" role="dialog" aria-modal="true" aria-label="Carrito de compras">
+      <header class="drawerTop">
+        <div class="drawerTitle">Carrito</div>
+        <button class="iconBtn" id="closeCart" aria-label="Cerrar carrito">✕</button>
+      </header>
 
-      <div class="panel">
-        <div class="cartLine">
-          <span>Subtotal</span>
-          <span id="cartSubtotal">—</span>
+      <div id="cartItems" class="cartItems" aria-label="Items del carrito"></div>
+
+      <div class="cartTotals" aria-label="Totales">
+        <div class="row">
+          <span class="muted">Subtotal</span>
+          <strong id="subtotal">0</strong>
         </div>
-        <div class="cartLine">
-          <span>Envío</span>
-          <span id="cartShipping">—</span>
+        <div class="row">
+          <span class="muted">Envío</span>
+          <strong id="shipping">0</strong>
         </div>
-        <div class="hr"></div>
-        <div class="cartTotal">
+        <div class="row totalRow">
           <span>Total</span>
-          <span id="cartTotal">—</span>
+          <strong id="total">0</strong>
         </div>
-      </div>
-    </div>
 
-    <div class="drawerFooter">
-      <button id="checkoutBtn" class="btn primary block" aria-label="Finalizar compra">Finalizar compra</button>
-      <button id="clearCartBtn" class="btn block" aria-label="Vaciar carrito">Vaciar carrito</button>
-      <p class="muted tiny" style="margin:0;">
-        Por ahora, “Finalizar compra” es simulado.
-      </p>
+        <div class="cartActions">
+          <button class="btn btnGhost" id="clearCart" type="button">Vaciar</button>
+          <button class="btn btnPrimary" id="checkout" type="button">Finalizar compra</button>
+        </div>
+        <div class="tiny muted">Envío fijo 12.000 COP • Gratis desde 150.000 COP</div>
+      </div>
     </div>
   </aside>
 
-  <!-- Modal producto -->
-  <div id="modalBackdrop" class="modalBackdrop" aria-hidden="true"></div>
-  <section id="productModal" class="modal" role="dialog" aria-modal="true" aria-label="Detalle del producto">
-    <div class="modalInner">
-      <div class="modalHeader">
-        <strong>Detalle</strong>
-        <button id="modalCloseBtn" class="btn icon" aria-label="Cerrar">✕</button>
-      </div>
+  <!-- Modal Producto -->
+  <div id="productModal" class="modal" hidden aria-hidden="true">
+    <div class="modalBackdrop" id="modalBackdrop" aria-hidden="true"></div>
+    <div class="modalPanel" role="dialog" aria-modal="true" aria-label="Detalle del producto" tabindex="-1">
+      <header class="modalTop">
+        <div class="modalTitle" id="modalTitle">Producto</div>
+        <button class="iconBtn" id="closeModal" aria-label="Cerrar">✕</button>
+      </header>
 
-      <div class="modalGrid">
+      <div class="modalBody">
         <div class="modalMedia">
-          <img id="modalImg" alt="" />
+          <img id="modalImg" alt="" loading="lazy" decoding="async" />
         </div>
 
         <div class="modalInfo">
-          <div class="pillRow" id="modalBadges"></div>
-          <h2 id="modalTitle" class="modalTitle"></h2>
-          <p id="modalDesc" class="modalDesc"></p>
+          <div class="badges" id="modalBadges"></div>
+          <p class="desc" id="modalDesc"></p>
 
-          <div class="variantGrid" aria-label="Selección de variante">
-            <div>
-              <label for="sizeSelect">Talla</label>
-              <select id="sizeSelect" class="select" aria-label="Seleccionar talla"></select>
-            </div>
-            <div>
-              <label for="colorSelect">Color</label>
-              <select id="colorSelect" class="select" aria-label="Seleccionar color"></select>
-            </div>
+          <div class="variantRow">
+            <label class="field">
+              <span class="fieldLabel">Talla</span>
+              <select id="modalSize" class="select" aria-label="Seleccionar talla"></select>
+            </label>
+
+            <label class="field">
+              <span class="fieldLabel">Color</span>
+              <select id="modalColor" class="select" aria-label="Seleccionar color"></select>
+            </label>
           </div>
 
-          <div class="priceBox" aria-label="Precio final">
-            <div>
-              <div class="muted tiny">Precio final</div>
-              <div class="row" style="gap:10px; align-items:baseline;">
-                <div id="modalPrice" class="big">—</div>
-                <div id="modalOldPrice" class="old hidden">—</div>
+          <div class="priceRow">
+            <div class="priceBlock">
+              <div class="muted tiny">Precio</div>
+              <div class="priceLine">
+                <strong class="price" id="modalPrice"></strong>
+                <span class="strike muted" id="modalStrike" hidden></span>
               </div>
-              <div id="modalFormula" class="muted tiny" style="margin-top:4px;"></div>
             </div>
-            <span id="modalDiscountHint" class="badge discount hidden">—</span>
+
+            <div class="qtyBlock">
+              <div class="muted tiny">Cantidad</div>
+              <div class="qtyCtrl" aria-label="Cantidad">
+                <button class="iconBtn" id="qtyMinus" aria-label="Disminuir">−</button>
+                <span id="qtyValue" class="qtyValue" aria-label="Cantidad actual">1</span>
+                <button class="iconBtn" id="qtyPlus" aria-label="Aumentar">+</button>
+              </div>
+            </div>
           </div>
 
           <div class="modalActions">
-            <button id="addToCartBtn" class="btn primary block" aria-label="Agregar al carrito">Agregar al carrito</button>
-            <button id="buyNowBtn" class="btn block" aria-label="Comprar ahora">Comprar ahora</button>
+            <button class="btn btnSoft" id="addToCart">Agregar al carrito</button>
+            <button class="btn btnPrimary" id="buyNow">Comprar ahora</button>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+  <!-- Toast -->
+  <div id="toastHost" class="toastHost" aria-live="polite" aria-relevant="additions"></div>
 
+  <script type="module" src="./supabaseClient.js"></script>
   <script type="module" src="./app.js"></script>
 </body>
 </html>
