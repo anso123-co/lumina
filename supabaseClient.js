@@ -1,15 +1,11 @@
-// supabaseClient.js (ESM)
-// Pega tus credenciales aquí (Settings -> API en Supabase):
-// - SUPABASE_URL
-// - SUPABASE_ANON_KEY
-//
-// IMPORTANTE: NO uses Service Role Key en frontend.
+// supabaseClient.js
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/+esm";
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+// 1) Pega tus credenciales:
+const SUPABASE_URL = "https://hguwqejcrypslxbcrdgy.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_Hp1PqdiYBVnptBmgqaxq_w_L7RPfOAB";
 
-export const SUPABASE_URL = "https://TU-PROYECTO.supabase.co";
-export const SUPABASE_ANON_KEY = "TU_SUPABASE_ANON_KEY";
-
+// 2) Cliente (persist session para admin)
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
