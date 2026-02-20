@@ -1,163 +1,163 @@
 <!doctype html>
-<html lang="es-CO">
+<html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin | Accesorios</title>
-  <meta name="description" content="Panel admin para gestionar productos." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Lumina — Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <div class="adminShell">
-    <header class="adminTop" role="banner">
-      <div class="inner">
-        <div class="row" style="gap:10px;">
-          <span class="logo" aria-label="Admin">
-            <span class="dot" aria-hidden="true"></span>
-            <strong>ADMIN</strong>
-            <span class="muted tiny">Accesorios</span>
-          </span>
-        </div>
+  <div class="bg-aurora" aria-hidden="true"></div>
 
-        <div class="row" style="gap:10px;">
-          <span id="adminEmail" class="muted small">—</span>
-          <button id="logoutBtn" class="btn hidden" aria-label="Cerrar sesión">Salir</button>
-        </div>
-      </div>
-    </header>
+  <!-- AppShell -->
+  <header class="appbar">
+    <a class="appbarLeft" href="./index.html" aria-label="Volver a tienda">
+      <span class="icon">←</span>
+      <span class="appbarTitle">Admin</span>
+    </a>
 
-    <main class="adminGrid" role="main">
-      <!-- Login -->
-      <section id="loginPanel" class="panel" aria-label="Login admin">
-        <h2>Iniciar sesión</h2>
-        <p class="muted" style="margin-top:-6px;">
-          Acceso solo para administradores. Usa email/contraseña (Supabase Auth).
-        </p>
+    <div class="appbarRight">
+      <span class="tiny muted" id="adminEmail">—</span>
+      <button class="btn btnGhost btnSm" id="logoutBtn" type="button">Salir</button>
+    </div>
+  </header>
 
-        <div class="formGrid">
-          <div>
-            <label class="muted tiny" for="loginEmail">Email</label>
-            <input id="loginEmail" class="input" type="email" placeholder="admin@correo.com" aria-label="Email" />
-          </div>
-          <div>
-            <label class="muted tiny" for="loginPass">Contraseña</label>
-            <input id="loginPass" class="input" type="password" placeholder="••••••••" aria-label="Contraseña" />
-          </div>
-          <button id="loginBtn" class="btn primary block" aria-label="Entrar">Entrar</button>
-          <p class="muted tiny" style="margin:0;">
-            Si inicias sesión y no tienes <span class="kbd">is_admin</span>, no podrás usar el panel.
-          </p>
+  <main class="container adminContainer">
+    <!-- Login -->
+    <section id="loginView" class="card cardPad loginCard">
+      <h1 class="h2">Iniciar sesión</h1>
+      <p class="muted">Solo administradores autorizados.</p>
+
+      <form id="loginForm" class="form">
+        <label class="field">
+          <span class="fieldLabel">Email</span>
+          <input class="input" id="email" type="email" autocomplete="email" required />
+        </label>
+
+        <label class="field">
+          <span class="fieldLabel">Contraseña</span>
+          <input class="input" id="password" type="password" autocomplete="current-password" required />
+        </label>
+
+        <button class="btn btnPrimary" type="submit">Entrar</button>
+      </form>
+    </section>
+
+    <!-- Admin -->
+    <section id="adminView" hidden>
+      <section class="adminTop">
+        <div class="adminTitleBlock">
+          <h2 class="h2">Productos</h2>
+          <p class="muted tiny">Crear, editar y eliminar — con imagen WebP optimizada.</p>
         </div>
+        <button class="btn btnPrimary" id="newProductBtn" type="button">+ Nuevo</button>
       </section>
 
       <!-- Editor -->
-      <section id="editorPanel" class="panel hidden" aria-label="Editor de productos">
-        <h2 id="editorTitle">Crear producto</h2>
-        <p class="muted" style="margin-top:-6px;">
-          Sube imagen, configura tallas con extra, colores, descuentos y destacado.
-        </p>
+      <section id="editor" class="card cardPad" hidden>
+        <div class="editorTop">
+          <h3 class="h3" id="editorTitle">Nuevo producto</h3>
+          <button class="iconBtn" id="closeEditor" aria-label="Cerrar editor">✕</button>
+        </div>
 
-        <div class="formGrid">
-          <div class="grid2">
-            <div>
-              <label class="muted tiny" for="nameInput">Nombre</label>
-              <input id="nameInput" class="input" placeholder="Ej: Pulsera de cuero premium" aria-label="Nombre" />
-            </div>
-            <div>
-              <label class="muted tiny" for="categoryInput">Categoría</label>
-              <select id="categoryInput" class="select" aria-label="Categoría">
+        <form id="productForm" class="form">
+          <input type="hidden" id="productId" />
+
+          <div class="formGrid">
+            <label class="field">
+              <span class="fieldLabel">Nombre</span>
+              <input class="input" id="pName" required />
+            </label>
+
+            <label class="field">
+              <span class="fieldLabel">Categoría</span>
+              <select class="select" id="pCategory" required>
                 <option value="manillas">Manillas</option>
                 <option value="pulseras">Pulseras</option>
                 <option value="anillos">Anillos</option>
                 <option value="collares">Collares</option>
               </select>
-            </div>
-          </div>
+            </label>
 
-          <div>
-            <label class="muted tiny" for="descInput">Descripción</label>
-            <textarea id="descInput" class="textarea" placeholder="Detalles del producto, material, estilo..." aria-label="Descripción"></textarea>
-          </div>
+            <label class="field span2">
+              <span class="fieldLabel">Descripción</span>
+              <textarea class="textarea" id="pDesc" rows="3"></textarea>
+            </label>
 
-          <div class="grid2">
-            <div>
-              <label class="muted tiny" for="basePriceInput">Precio base (COP)</label>
-              <input id="basePriceInput" class="input" inputmode="numeric" placeholder="Ej: 45000" aria-label="Precio base" />
-            </div>
-            <div>
-              <label class="muted tiny" for="discountInput">Descuento (%)</label>
-              <input id="discountInput" class="input" inputmode="numeric" placeholder="Ej: 15" aria-label="Descuento" />
-            </div>
-          </div>
+            <label class="field">
+              <span class="fieldLabel">Precio base (COP)</span>
+              <input class="input" id="pBasePrice" type="number" inputmode="numeric" min="0" step="1000" required />
+            </label>
 
-          <div class="grid2">
-            <div class="row" style="align-items:center; justify-content:space-between;">
-              <div>
-                <div class="muted tiny">Destacado</div>
-                <div class="muted small">Aparece primero en la tienda.</div>
+            <label class="field">
+              <span class="fieldLabel">Descuento % (0-100)</span>
+              <input class="input" id="pDiscount" type="number" inputmode="numeric" min="0" max="100" step="1" />
+            </label>
+
+            <label class="field inline">
+              <input id="pFeatured" type="checkbox" class="checkbox" />
+              <span>Destacado</span>
+            </label>
+
+            <label class="field span2">
+              <span class="fieldLabel">Colores (separados por coma)</span>
+              <input class="input" id="pColors" placeholder="Ej: Negro, Dorado, Plateado" />
+              <span class="tiny muted">Se guarda como text[] en Postgres.</span>
+            </label>
+
+            <label class="field span2">
+              <span class="fieldLabel">Tallas (una por línea: Etiqueta, Extra)</span>
+              <textarea class="textarea" id="pSizes" rows="3" placeholder="Única, 0&#10;M, 5000"></textarea>
+              <span class="tiny muted">Si dejas vacío, se crea “Única, 0”.</span>
+            </label>
+
+            <label class="field span2">
+              <span class="fieldLabel">Imagen</span>
+              <input class="input" id="pImage" type="file" accept="image/*" />
+              <div class="tiny muted">
+                Se comprime en el navegador: WebP (q≈0.75), máx 1200px ancho.
               </div>
-              <label class="row" style="gap:10px;">
-                <input id="featuredInput" type="checkbox" aria-label="Destacado" />
-                <span class="badge featured">Sí</span>
-              </label>
-            </div>
-
-            <div>
-              <div class="muted tiny">Colores (enter para agregar)</div>
-              <div id="colorsPills" class="pillInput" aria-label="Colores disponibles">
-                <input id="colorAddInput" placeholder="Ej: Negro" aria-label="Agregar color" />
+              <div class="previewRow">
+                <img id="imgPreview" class="previewImg" alt="Vista previa" />
+                <div class="tiny muted" id="imgInfo">—</div>
               </div>
-              <div class="helper">Se guardan como <span class="kbd">text[]</span>.</div>
-            </div>
+            </label>
           </div>
 
-          <div>
-            <div class="muted tiny">Tallas (enter para agregar)</div>
-            <div class="helper" style="margin-bottom:8px;">
-              Formato: <span class="kbd">Etiqueta, Extra</span> → ejemplo: <span class="kbd">M, 5000</span>
-            </div>
-            <div id="sizesPills" class="pillInput" aria-label="Tallas disponibles">
-              <input id="sizeAddInput" placeholder="Ej: S, 0" aria-label="Agregar talla" />
-            </div>
+          <div class="editorActions">
+            <button class="btn btnGhost" id="deleteBtn" type="button" hidden>Eliminar</button>
+            <button class="btn btnPrimary" type="submit" id="saveBtn">Guardar</button>
           </div>
-
-          <div class="grid2">
-            <div>
-              <div class="muted tiny">Imagen (JPG/PNG/WEBP)</div>
-              <input id="imageInput" class="input" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Subir imagen" />
-              <div class="helper">La imagen se sube a Supabase Storage (bucket: product-images).</div>
-            </div>
-            <div>
-              <div class="muted tiny">Previsualización</div>
-              <div class="preview" aria-label="Vista previa">
-                <img id="imagePreview" alt="Previsualización" class="hidden" />
-                <span id="previewHint" class="muted small">Sin imagen</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="row wrap">
-            <button id="saveBtn" class="btn primary" aria-label="Guardar producto">Guardar</button>
-            <button id="cancelEditBtn" class="btn ghost hidden" aria-label="Cancelar edición">Cancelar</button>
-            <span id="savingHint" class="muted small"></span>
-          </div>
-        </div>
+        </form>
       </section>
 
-      <!-- List -->
-      <section id="listPanel" class="panel hidden" aria-label="Lista de productos">
-        <div class="row spread">
-          <h2 style="margin:0;">Productos</h2>
-          <button id="refreshBtn" class="btn" aria-label="Actualizar lista">Actualizar</button>
+      <!-- Listado -->
+      <section class="card cardPad">
+        <div class="listHeader adminListHeader">
+          <div class="tiny" id="adminMeta">—</div>
+          <button class="btn btnSoft btnSm" id="refreshBtn" type="button">Actualizar</button>
         </div>
-        <div class="hr"></div>
-        <div id="productsList" class="table" aria-live="polite"></div>
+
+        <div id="adminList" class="adminList" aria-label="Listado admin"></div>
+
+        <div id="adminEmpty" class="emptyState" hidden>
+          <div class="emptyIcon" aria-hidden="true">📦</div>
+          <div class="emptyTitle">No hay productos</div>
+          <div class="emptySub">Crea el primero con “Nuevo”.</div>
+        </div>
       </section>
-    </main>
-  </div>
+    </section>
+  </main>
 
-  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+  <div id="toastHost" class="toastHost" aria-live="polite" aria-relevant="additions"></div>
 
+  <script type="module" src="./supabaseClient.js"></script>
   <script type="module" src="./admin.js"></script>
 </body>
-</html>
+  </html>
